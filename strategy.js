@@ -6,6 +6,7 @@
 var passport = require('passport')
   , TwitterStrategy = require('passport-twitter').Strategy
   , FacebookStrategy = require('passport-facebook').Strategy 
+  , LocalStrategy = require('passport-local').Strategy 
   , config = require('./config.json');
 
 /*
@@ -42,4 +43,19 @@ if(config.auth.facebook.clientid.length) {
       return done(null, profile);
     }
   ));
-}
+} 
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Unknown user' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Invalid password' });
+      }
+      return done(null, user);
+    });
+  }
+));

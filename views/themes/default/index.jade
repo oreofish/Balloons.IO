@@ -18,11 +18,16 @@ block content
 						a#twitbutt.sb.sb-small.sb-twitter(href="/auth/twitter") 
 							i 
 							| Sign in with Twitter
-						em or
-						a#fbbutt.sb.sb-small.sb-facebook(href="/auth/facebook") 
-							i
-							| Sign in with facebook
-
+						form(action="/login",method="post")
+							div
+								label Username:
+								input(type="text",name="username")
+								br
+							div
+								label Password:
+								input(type="password",name="password")
+							div
+								input(type="submit",value="Log In")
 			// #login-box 
 		// .homepage-container
 	

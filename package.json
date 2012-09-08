@@ -13,6 +13,7 @@
       , "passport": "0.1.x"
       , "passport-twitter": "0.1.x"
       , "passport-facebook": "0.1.x"
+      , "passport-local": "0.1.x"
       , "forever": "*"
       , "redis-url": "0.1.0"
       , "url": "*"
