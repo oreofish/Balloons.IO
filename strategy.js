@@ -47,7 +47,7 @@ if(config.auth.facebook.clientid.length) {
 
 var users = [
     { id: 1, username: 'bob', password: 'bob', email: 'bob@example.com' }
-  , { id: 2, username: 'joe', password: 'birthday', email: 'joe@example.com' }
+  , { id: 2, username: 'ada', password: 'ada', email: 'joe@example.com' }
 ];
 
 function findById(id, fn) {
