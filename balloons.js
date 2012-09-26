@@ -2,6 +2,8 @@
  * Module dependencies
  */
 
+require("coffee-script")
+
 var express = require('express')
   , http = require('http')
   , passport = require('passport')

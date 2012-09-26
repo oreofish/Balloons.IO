@@ -16,6 +16,7 @@
       , "passport-local": "0.1.x"
       , "forever": "*"
       , "redis-url": "0.1.0"
+      , "coffee-script": "*"
       , "url": "*"
     }
   , "engines": {
