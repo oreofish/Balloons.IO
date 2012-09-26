@@ -9,13 +9,11 @@ config = require('./config.json')
 
 # Auth strategy
 
-passport.serializeUser((user, done) ->
+passport.serializeUser (user, done) ->
   done(null, user)
-)
 
-passport.deserializeUser((user, done) ->
+passport.deserializeUser (user, done) ->
   done(null, user)
-)
 
 if(config.auth.twitter.consumerkey.length)
   passport.use(new TwitterStrategy({
@@ -61,7 +59,7 @@ passport.use(new LocalStrategy(
     # username, or the password is not correct, set the user to `false` to
     # indicate failure and set a flash message.  Otherwise, return the
     # authenticated `user`.
-    findByUsername(username, (err, user) ->
+    findByUsername username, (err, user) ->
       if (err)
         return done(err)
       if (!user)
@@ -69,5 +67,4 @@ passport.use(new LocalStrategy(
       if (user.password != password)
         return done(null, false, { message: 'Invalid password' })
       return done(null, user);
-    )
 ))

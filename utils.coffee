@@ -28,12 +28,11 @@ exports.validRoomName = (req, res, fn) ->
 
 # Checks if room exists
 exports.roomExists = (req, res, client, fn) ->
-  client.hget('balloons:rooms:keys', encodeURIComponent(req.body.room_name), (err, roomKey) ->
+  client.hget 'balloons:rooms:keys', encodeURIComponent(req.body.room_name), (err, roomKey) ->
     if(!err && roomKey)
       res.redirect( '/' + roomKey )
     else
       fn()
-  )
 
 
 # Creates a room
@@ -47,27 +46,25 @@ exports.createRoom = (req, res, client) ->
     online: 0
   }
 
-  client.hmset('rooms:' + roomKey + ':info', room, (err, ok) ->
+  client.hmset 'rooms:' + roomKey + ':info', room, (err, ok) ->
     if(!err && ok)
       client.hset('balloons:rooms:keys', encodeURIComponent(req.body.room_name), roomKey)
       client.sadd('balloons:public:rooms', roomKey)
       res.redirect('/' + roomKey)
     else
       res.send(500)
-  )
 
 # Get Room Info
 
 exports.getRoomInfo = (req, res, client, fn) ->
-  client.hgetall('rooms:' + req.params.id + ':info', (err, room) ->
+  client.hgetall 'rooms:' + req.params.id + ':info', (err, room) ->
     if(!err && room && Object.keys(room).length)
       fn(room)
     else
       res.redirect('back')
-  )
 
 exports.getPublicRoomsInfo = (client, fn) ->
-  client.smembers('balloons:public:rooms', (err, publicRooms) ->
+  client.smembers 'balloons:public:rooms', (err, publicRooms) ->
     rooms = []
     len = publicRooms.length
     if(!len)
@@ -75,8 +72,8 @@ exports.getPublicRoomsInfo = (client, fn) ->
 
     publicRooms.sort(exports.caseInsensitiveSort)
 
-    publicRooms.forEach( (roomKey, index) ->
-      client.hgetall('rooms:' + roomKey + ':info', (err, room) ->
+    publicRooms.forEach (roomKey, index) ->
+      client.hgetall 'rooms:' + roomKey + ':info', (err, room) ->
         # prevent for a room info deleted before this check
         if(!err && room && Object.keys(room).length) 
           # add room info
@@ -92,18 +89,15 @@ exports.getPublicRoomsInfo = (client, fn) ->
         else
           # reduce check length
           len -= 1
-      )
-    )
-  )
 
 # Get connected users at room
 
 exports.getUsersInRoom = (req, res, client, room, fn) ->
-  client.smembers('rooms:' + req.params.id + ':online', (err, online_users) ->
+  client.smembers 'rooms:' + req.params.id + ':online', (err, online_users) ->
     users = []
 
-    online_users.forEach( (userKey, index) ->
-      client.get('users:' + userKey + ':status', (err, status) ->
+    online_users.forEach (userKey, index) ->
+      client.get 'users:' + userKey + ':status', (err, status) ->
         msnData = userKey.split(':')
         username = if msnData.length > 1 then msnData[1] else msnData[0]
         provider = if msnData.length > 1 then msnData[0] else "twitter"
@@ -113,31 +107,26 @@ exports.getUsersInRoom = (req, res, client, room, fn) ->
           provider: provider,
           status: status || 'available'
         })
-      )
-    )
 
     fn(users)
-  )
 
 # Get public rooms
 
 exports.getPublicRooms = (client, fn) ->
-  client.smembers("balloons:public:rooms", (err, rooms) ->
+  client.smembers "balloons:public:rooms", (err, rooms) ->
     if (!err && rooms)
       fn(rooms)
     else
       fn([])
-  )
 
 # Get User status
 
 exports.getUserStatus = (user, client, fn) ->
-  client.get('users:' + user.provider + ":" + user.username + ':status', (err, status) ->
+  client.get 'users:' + user.provider + ":" + user.username + ':status', (err, status) ->
     if (!err && status)
       fn(status)
     else
       fn('available')
-  )
 
 # Enter to a room
 
@@ -159,7 +148,6 @@ exports.enterRoom = (req, res, room, users, rooms, status) ->
 exports.caseInsensitiveSort = (a, b) ->
   ret = 0
 
-  a = a.toLowerCase()
   b = b.toLowerCase()
 
   if(a > b)
