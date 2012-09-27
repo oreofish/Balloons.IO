@@ -1,6 +1,5 @@
 
 # Module dependencies
-
 express = require('express')
 http = require('http')
 passport = require('passport')
@@ -10,7 +9,6 @@ redis = require('redis')
 RedisStore = require('connect-redis')(express)
 
 # Instantiate redis
-
 if (process.env.REDISTOGO_URL)
   rtg   = require('url').parse(process.env.REDISTOGO_URL)
   client = exports.client  = redis.createClient(rtg.port, rtg.hostname)
@@ -21,15 +19,12 @@ else
 sessionStore = exports.sessionStore = new RedisStore({client: client})
 
 # Clean db and create folder
-
 init(client)
 
 # Passportjs auth strategy
-
 require('./strategy')
 
 # Create and config server
-
 app = exports.app = express()
 
 app.configure () ->
@@ -48,19 +43,15 @@ app.configure () ->
   app.use(app.router)
 
 # Routes
-
 require('./routes')
 
 # Web server
-
 exports.server = http.createServer(app).listen app.get('port'), () ->
   console.log('Balloons.io started on port %d', app.get('port'))
 
 # Socket.io
-
 require('./sockets')
 
 # Catch uncaught exceptions
-
 process.on 'uncaughtException', (err) ->
   console.log('Exception: ' + err.stack)

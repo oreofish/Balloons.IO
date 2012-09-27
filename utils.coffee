@@ -1,7 +1,6 @@
 crypto = require('crypto')
 
 # Restrict paths
-
 exports.restrict = (req, res, next) ->
   if(req.isAuthenticated())
     next()
@@ -9,14 +8,12 @@ exports.restrict = (req, res, next) ->
     res.redirect('/')
 
 # Generates a URI Like key for a room
-
 exports.genRoomKey = () ->
   shasum = crypto.createHash('sha1')
   shasum.update(Date.now().toString())
   return shasum.digest('hex').substr(0,6)
 
 # Room name is valid
-
 exports.validRoomName = (req, res, fn) ->
   req.body.room_name = req.body.room_name.trim()
   nameLen = req.body.room_name.length
@@ -55,7 +52,6 @@ exports.createRoom = (req, res, client) ->
       res.send(500)
 
 # Get Room Info
-
 exports.getRoomInfo = (req, res, client, fn) ->
   client.hgetall 'rooms:' + req.params.id + ':info', (err, room) ->
     if(!err && room && Object.keys(room).length)
@@ -91,7 +87,6 @@ exports.getPublicRoomsInfo = (client, fn) ->
           len -= 1
 
 # Get connected users at room
-
 exports.getUsersInRoom = (req, res, client, room, fn) ->
   client.smembers 'rooms:' + req.params.id + ':online', (err, online_users) ->
     users = []
@@ -120,7 +115,6 @@ exports.getPublicRooms = (client, fn) ->
       fn([])
 
 # Get User status
-
 exports.getUserStatus = (user, client, fn) ->
   client.get 'users:' + user.provider + ":" + user.username + ':status', (err, status) ->
     if (!err && status)
@@ -129,7 +123,6 @@ exports.getUserStatus = (user, client, fn) ->
       fn('available')
 
 # Enter to a room
-
 exports.enterRoom = (req, res, room, users, rooms, status) ->
   res.locals({
     room: room,
@@ -144,7 +137,6 @@ exports.enterRoom = (req, res, room, users, rooms, status) ->
   res.render('room')
 
 # Sort Case Insensitive
-
 exports.caseInsensitiveSort = (a, b) ->
   ret = 0
 

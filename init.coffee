@@ -2,7 +2,6 @@
 # Initialize the application
 
 # Module dependencies
-
 fs = require('fs')
 
 
@@ -10,7 +9,6 @@ fs = require('fs')
 #
 # @param {Object} Redis client instance
 # API @public
-
 module.exports = (client)->
   # Clean all forgoten sockets in Redis.io
 

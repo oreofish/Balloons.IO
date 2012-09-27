@@ -1,6 +1,5 @@
 
 # Module dependencies
-
 passport = require('passport')
 TwitterStrategy = require('passport-twitter').Strategy
 FacebookStrategy = require('passport-facebook').Strategy 
@@ -8,7 +7,6 @@ LocalStrategy = require('passport-local').Strategy
 config = require('./config.json')
 
 # Auth strategy
-
 passport.serializeUser (user, done) ->
   done(null, user)
 
